@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.UBJsonReader;
 
-public class Ship {
+public class Ship implements HasPositionAndOrientation {
 
   private Model model;
   private ModelInstance modelInstance;
@@ -78,5 +78,14 @@ public class Ship {
         heading.x * mainThrustPower,
         heading.y * mainThrustPower,
         heading.z * mainThrustPower);
+  }
+
+  public Vector3 getPosition() {
+    return position;
+  }
+  
+  @Override
+  public Quaternion getOrientation() {
+    return orientation;
   }
 }

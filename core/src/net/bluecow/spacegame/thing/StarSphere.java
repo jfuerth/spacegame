@@ -10,22 +10,21 @@ import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.UBJsonReader;
 
-public class Asteroid implements HasPosition {
+public class StarSphere {
 
   private Model model;
   private ModelInstance modelInstance;
   
   private Vector3 position = new Vector3();
-  private Vector3 velocity = new Vector3();
   private Quaternion orientation = new Quaternion();
   
-  public Asteroid() {
+  public StarSphere() {
     
   }
   
   public void initialize() {
     G3dModelLoader loader = new G3dModelLoader(new UBJsonReader());
-    model = loader.loadModel(Gdx.files.internal("data/asteroid2.g3db"));
+    model = loader.loadModel(Gdx.files.internal("data/star-sphere.g3db"));
     
     modelInstance = new ModelInstance(model, 0, 0, 0);
     home();
@@ -37,13 +36,10 @@ public class Asteroid implements HasPosition {
 
   public void home() {
     orientation.set(Vector3.X, 0);
-    orientation.mul(new Quaternion(Vector3.Y, -90));
-    velocity.setZero();
-    position.set(3, 0, 0);
+    position.set(0, 0, 0);
   }
   
   public void update() {
-    position.add(velocity);
   }
   
   public void render(ModelBatch modelBatch, Environment environment) {
@@ -51,7 +47,4 @@ public class Asteroid implements HasPosition {
     modelBatch.render(modelInstance, environment);
   }
 
-  public Vector3 getPosition() {
-    return position;
-  }
 }
