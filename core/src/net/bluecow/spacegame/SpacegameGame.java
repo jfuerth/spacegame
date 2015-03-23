@@ -83,6 +83,12 @@ public class SpacegameGame extends ApplicationAdapter {
     if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
       ship.thrustRight();
     }
+    if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
+      ship.rollCW();
+    }
+    if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+      ship.rollCCW();
+    }
     if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
       ship.thrustForward();
     }

@@ -10,10 +10,26 @@ import com.badlogic.gdx.math.Vector3;
  */
 public class ObjectViewCamera implements CameraTrackingStrategy {
 
+  /**
+   * The object this camera is affixed to.
+   */
   private HasPositionAndOrientation objectToTrack;
+  
+  /**
+   * The camera's location relative to the origin point of the object we're tracking.
+   */
   private Vector3 cameraOffset;
-  private Vector3 up = new Vector3(0, 1, 0);
+  
+  /**
+   * The direction the camera faces, in the object's local coordinate system of the object we're tracking.
+   */
+  private Vector3 forward = Vector3.Y;
 
+  /**
+   * The up direction for the camera, in the local coordinate system of the object we're tracking.
+   */
+  private Vector3 up = Vector3.X;
+  
   public ObjectViewCamera(HasPositionAndOrientation objectToTrack, Vector3 cameraOffset) {
     this.objectToTrack = objectToTrack;
     this.cameraOffset = cameraOffset;
@@ -24,10 +40,13 @@ public class ObjectViewCamera implements CameraTrackingStrategy {
     cam.position.set(objectToTrack.getPosition());
     cam.position.add(cameraOffset);
     
-    Vector3 objectDirection = new Vector3(up);
-    objectToTrack.getOrientation().transform(objectDirection);
-    cam.direction.set(objectDirection);
-    cam.up.set(Vector3.Z);
+    Vector3 dir = new Vector3(forward);
+    objectToTrack.getOrientation().transform(dir);
+    cam.direction.set(dir);
+    
+    dir.set(up);
+    objectToTrack.getOrientation().transform(dir);
+    cam.up.set(dir);
     
     cam.update();
   }

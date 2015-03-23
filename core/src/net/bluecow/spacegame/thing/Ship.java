@@ -15,14 +15,17 @@ public class Ship implements HasPositionAndOrientation {
   private Model model;
   private ModelInstance modelInstance;
   
-  /** Speed of rotation in Z direction */
-  private float rotationZ;
+  /** Speed of rotation around the ship's Y axis */
+  private float rotationY;
+
+  /** Speed of rotation around the ship's X axis */
+  private float rotationX;
 
   private Vector3 position = new Vector3();
   private Vector3 velocity = new Vector3();
   private Quaternion orientation = new Quaternion();
-  private final float sideThrustPower = 0.2f;
-  private final float mainThrustPower = 0.001f;
+  private final float sideThrustPower = 0.01f;
+  private final float mainThrustPower = 0.0001f;
   
   public Ship() {
     
@@ -42,7 +45,6 @@ public class Ship implements HasPositionAndOrientation {
 
   public void home() {
     orientation.set(Vector3.X, 0);
-    orientation.mul(new Quaternion(Vector3.Y, -90));
     velocity.setZero();
     position.set(-3, 0, 0);
   }
@@ -50,11 +52,13 @@ public class Ship implements HasPositionAndOrientation {
   public void update() {
     Quaternion rot = new Quaternion();
 
-    rot.set(Vector3.Z, rotationZ);
-    orientation.mulLeft(rot);
-    
+    rot.set(Vector3.X, rotationX);
+    orientation.mul(rot);
+
+    rot.set(Vector3.Y, rotationY);
+    orientation.mul(rot);
+
     position.add(velocity);
-    
   }
   
   public void render(ModelBatch modelBatch, Environment environment) {
@@ -63,11 +67,19 @@ public class Ship implements HasPositionAndOrientation {
   }
 
   public void thrustLeft() {
-    rotationZ -= sideThrustPower;
+    rotationX += sideThrustPower;
   }
 
   public void thrustRight() {
-    rotationZ += sideThrustPower;
+    rotationX -= sideThrustPower;
+  }
+  
+  public void rollCW() {
+    rotationY += sideThrustPower;
+  }
+
+  public void rollCCW() {
+    rotationY -= sideThrustPower;
   }
 
   public void thrustForward() {
