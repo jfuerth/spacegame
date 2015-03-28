@@ -27,13 +27,18 @@ public class SpacegameGame extends ApplicationAdapter {
   private Ship ship;
   private Asteroid asteroid;
   private StarSphere starSphere;
-  
+
   private final List<CameraTrackingStrategy> camStrategies = new ArrayList<CameraTrackingStrategy>();
   private CameraTrackingStrategy currentCamStrategy;
-  
+
   @Override
   public void create() {
-    
+
+    Gdx.graphics.setDisplayMode(
+        Gdx.graphics.getDesktopDisplayMode().width,
+        Gdx.graphics.getDesktopDisplayMode().height,
+        true);
+
     // Create camera sized to screens width/height with Field of View of 75 degrees
     camera = new PerspectiveCamera(75, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
@@ -48,17 +53,17 @@ public class SpacegameGame extends ApplicationAdapter {
     // the rendering process. Create one, then create an Ambient ( non-positioned, non-directional ) light.
     environment = new Environment();
     environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1f, 1f, 1f, 1.0f));
-    
+
     ship = new Ship();
     ship.initialize();
-    
+
     camStrategies.add(new FixedPositionTrackingCamera(new Vector3(0f, 4f, 8f), ship));
-    camStrategies.add(new ObjectViewCamera(ship, new Vector3(0, 0, 0)));
+    camStrategies.add(new ObjectViewCamera(ship, new Vector3(2, -2, 0), new Vector3(-0.3f, 1, 0), Vector3.Y));
     currentCamStrategy = camStrategies.get(1);
 
     asteroid = new Asteroid();
     asteroid.initialize();
-    
+
     starSphere = new StarSphere();
     starSphere.initialize();
   }
@@ -101,15 +106,15 @@ public class SpacegameGame extends ApplicationAdapter {
     if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) {
       currentCamStrategy = camStrategies.get(1);
     }
-    
+
     currentCamStrategy.update(camera);
-    
+
     // When you change the camera details, you need to call update();
     // Also note, you need to call update() at least once.
     ship.update();
     asteroid.update();
     starSphere.update();
-    
+
     modelBatch.begin(camera);
     ship.render(modelBatch, environment);
     asteroid.render(modelBatch, environment);

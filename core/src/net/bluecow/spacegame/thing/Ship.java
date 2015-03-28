@@ -14,7 +14,7 @@ public class Ship implements HasPositionAndOrientation {
 
   private Model model;
   private ModelInstance modelInstance;
-  
+
   /** Speed of rotation around the ship's Y axis */
   private float rotationY;
 
@@ -25,20 +25,20 @@ public class Ship implements HasPositionAndOrientation {
   private Vector3 velocity = new Vector3();
   private Quaternion orientation = new Quaternion();
   private final float sideThrustPower = 0.01f;
-  private final float mainThrustPower = 0.0001f;
-  
+  private final float mainThrustPower = 0.001f;
+
   public Ship() {
-    
+
   }
-  
+
   public void initialize() {
     G3dModelLoader loader = new G3dModelLoader(new UBJsonReader());
     model = loader.loadModel(Gdx.files.internal("data/ship00.g3db"));
-    
+
     modelInstance = new ModelInstance(model, 0, 0, 0);
     home();
   }
-  
+
   public void dispose() {
     model.dispose();
   }
@@ -48,7 +48,7 @@ public class Ship implements HasPositionAndOrientation {
     velocity.setZero();
     position.set(-3, 0, 0);
   }
-  
+
   public void update() {
     Quaternion rot = new Quaternion();
 
@@ -60,7 +60,7 @@ public class Ship implements HasPositionAndOrientation {
 
     position.add(velocity);
   }
-  
+
   public void render(ModelBatch modelBatch, Environment environment) {
     modelInstance.transform.set(position, orientation);
     modelBatch.render(modelInstance, environment);
@@ -73,7 +73,7 @@ public class Ship implements HasPositionAndOrientation {
   public void thrustRight() {
     rotationX -= sideThrustPower;
   }
-  
+
   public void rollCW() {
     rotationY += sideThrustPower;
   }
@@ -83,7 +83,6 @@ public class Ship implements HasPositionAndOrientation {
   }
 
   public void thrustForward() {
-    System.out.println("Forward!");
     Vector3 heading = new Vector3(0f, 1f, 0);
     orientation.transform(heading);
     velocity.add(
@@ -92,10 +91,11 @@ public class Ship implements HasPositionAndOrientation {
         heading.z * mainThrustPower);
   }
 
+  @Override
   public Vector3 getPosition() {
     return position;
   }
-  
+
   @Override
   public Quaternion getOrientation() {
     return orientation;
